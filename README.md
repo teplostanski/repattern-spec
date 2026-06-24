@@ -1,43 +1,14 @@
-# Astro Starter Kit: Minimal
+# repattern Specification
 
-```sh
-npm create astro@latest -- --template minimal
-```
+Specification of an embeddable DSL for building JavaScript RegExp from declarative Scheme objects.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+## Abstract
 
-## 🚀 Project Structure
+The repattern specification is an [embeddable DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for building JavaScript regular expressions from declarative [`Scheme`](./src/content/spec/current/en.md#21-scheme) objects, which are converted into `RegExp` instances.
 
-Inside of your Astro project, you'll see the following folders and files:
+Schemes are a human-readable format for describing patterns, as an alternative to writing regular expressions by hand.
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## License
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
-
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
-
-Any static assets, like images, can be placed in the `public/` directory.
-
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- **Specification** (`src/content/spec/`) — [CC BY-SA 4.0](LICENSE-SPEC)
+- **Website source code** — [MIT](LICENSE)

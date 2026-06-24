@@ -1,0 +1,19 @@
+---
+import Spec from '../layouts/Spec.astro';
+import type { SpecPageData } from '../lib/load-spec-page';
+import type { Locale } from '../lib/spec';
+
+interface Props extends SpecPageData {
+  locale: Locale;
+}
+
+const { locale, entry, Content } = Astro.props;
+---
+
+<Spec
+  lang={locale}
+  title={entry.data.title}
+  description={entry.data.description}
+>
+  <Content />
+</Spec>

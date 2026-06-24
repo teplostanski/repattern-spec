@@ -1,0 +1,18 @@
+.markdown-preview pre.astro-code {
+  background-color: #f4f3ec !important;
+}
+
+@media (prefers-color-scheme: dark) {
+  html[data-theme='auto'] .markdown-preview pre.astro-code {
+    background-color: #14121a !important;
+    color: var(--shiki-dark) !important;
+  }
+
+  html[data-theme='auto'] .markdown-preview .astro-code span {
+    color: var(--shiki-dark) !important;
+    background-color: transparent !important;
+    font-style: var(--shiki-dark-font-style) !important;
+    font-weight: var(--shiki-dark-font-weight) !important;
+    text-decoration: var(--shiki-dark-text-decoration) !important;
+  }
+}
