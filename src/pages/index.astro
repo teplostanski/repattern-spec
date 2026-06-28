@@ -1,0 +1,9 @@
+---
+import SpecDocument from '../components/SpecDocument.astro';
+import { loadSpecPageOrThrow } from '../lib/load-spec-page';
+import { DEFAULT_LOCALE } from '../lib/spec';
+
+const page = await loadSpecPageOrThrow(DEFAULT_LOCALE);
+---
+
+<SpecDocument locale={DEFAULT_LOCALE} {...page} />

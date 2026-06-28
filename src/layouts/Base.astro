@@ -1,0 +1,104 @@
+---
+import '../styles/global.css';
+import { siteConfig } from '../config/site';
+import { DEFAULT_LOCALE, specPath, type Locale } from '../lib/spec';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description?: string;
+  version?: string;
+  noIndex?: boolean;
+}
+
+const OG_LOCALES = { en: 'en_US', ru: 'ru_RU' } as const satisfies Record<
+  Locale,
+  string
+>;
+
+const { lang, title, description, version, noIndex = false } = Astro.props;
+const fullTitle = `${title} · ${siteConfig.name}`;
+const absoluteUrl = (path: string) => new URL(path, siteConfig.url).href;
+const canonical = absoluteUrl(
+  version ? specPath(lang, version) : specPath(lang, siteConfig.spec.currentVersion),
+);
+const ogImage = {
+  width: 1200,
+  height: 630,
+  png: absoluteUrl('/og.png'),
+  webp: absoluteUrl('/og.webp'),
+} as const;
+const alternateLocales = siteConfig.i18n.locales.filter(
+  (locale) => locale !== lang,
+);
+const alternateVersion = version ?? siteConfig.spec.currentVersion;
+---
+
+<!doctype html>
+<html lang={lang} data-theme="auto">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="shortcut icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#16171d" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    {description && <meta name="description" content={description} />}
+    <meta name="author" content={siteConfig.author[lang]} />
+    <meta name="keywords" content={siteConfig.keywords[lang].join(', ')} />
+    {noIndex && <meta name="robots" content="noindex" />}
+    {!noIndex && <link rel="canonical" href={canonical} />}
+    {
+      !noIndex &&
+        siteConfig.i18n.locales.map((locale) => (
+          <link
+            rel="alternate"
+            hreflang={locale}
+            href={absoluteUrl(specPath(locale, alternateVersion))}
+          />
+        ))
+    }
+    {
+      !noIndex && (
+        <link
+          rel="alternate"
+          hreflang="x-default"
+          href={absoluteUrl(specPath(DEFAULT_LOCALE, alternateVersion))}
+        />
+      )
+    }
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={siteConfig.name} />
+    <meta property="og:title" content={fullTitle} />
+    {description && <meta property="og:description" content={description} />}
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content={OG_LOCALES[lang]} />
+    {
+      alternateLocales.map((locale) => (
+        <meta property="og:locale:alternate" content={OG_LOCALES[locale]} />
+      ))
+    }
+    <meta property="og:image" content={ogImage.png} />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content={String(ogImage.width)} />
+    <meta property="og:image:height" content={String(ogImage.height)} />
+    <meta property="og:image" content={ogImage.webp} />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content={String(ogImage.width)} />
+    <meta property="og:image:height" content={String(ogImage.height)} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    {description && <meta name="twitter:description" content={description} />}
+    <meta name="twitter:image" content={ogImage.png} />
+  </head>
+  <body>
+    <main class="site-main">
+      <slot />
+    </main>
+  </body>
+</html>

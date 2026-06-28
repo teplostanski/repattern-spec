@@ -1,0 +1,79 @@
+---
+import Base from '../layouts/Base.astro';
+import {
+  CURRENT_VERSION,
+  DEFAULT_LOCALE,
+  specPath,
+} from '../lib/spec';
+
+const copy = {
+  en: {
+    title: 'Page not found',
+    description: 'The page you requested does not exist.',
+    home: 'Back to specification',
+  },
+  ru: {
+    title: 'Страница не найдена',
+    description: 'Запрошенная страница не существует.',
+    home: 'К спецификации',
+  },
+} as const;
+---
+
+<Base
+  lang={DEFAULT_LOCALE}
+  title={copy.en.title}
+  description={copy.en.description}
+  noIndex
+>
+  <section class="not-found">
+    <p class="not-found__code" aria-hidden="true">404</p>
+    <h1>{copy.en.title}</h1>
+    <p class="not-found__lead">{copy.en.description}</p>
+    <p class="not-found__lead" lang="ru">{copy.ru.description}</p>
+    <p class="not-found__actions">
+      <a href={specPath(DEFAULT_LOCALE, CURRENT_VERSION)}>{copy.en.home}</a>
+      <span class="not-found__sep" aria-hidden="true">·</span>
+      <a href={specPath('ru', CURRENT_VERSION)} lang="ru">{copy.ru.home}</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    padding-top: 4rem;
+  }
+
+  .not-found__code {
+    margin: 0 0 0.75rem;
+    font-family: var(--mono);
+    font-size: 0.875rem;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .not-found h1 {
+    margin: 0 0 0.65em;
+    font-size: 1.75em;
+    font-weight: 600;
+    line-height: 1.25;
+    letter-spacing: -0.02em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 0.3em;
+  }
+
+  .not-found__lead {
+    margin: 0 0 0.5em;
+    color: var(--muted);
+    max-width: 36rem;
+  }
+
+  .not-found__actions {
+    margin: 1.75rem 0 0;
+  }
+
+  .not-found__sep {
+    margin: 0 0.5rem;
+    color: var(--muted);
+  }
+</style>
