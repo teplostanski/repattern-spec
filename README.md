@@ -13,12 +13,15 @@ Schemes are a human-readable format for describing patterns, as an alternative t
 - **Specification** (`src/content/spec/`) — [CC BY-SA 4.0](LICENSE-SPEC)
 - **Website source code** — [MIT](LICENSE)
 
+<br>
+<br>
+
 <div align="center">
   <a href="https://astro.build" target="_blank">
     <img src="https://astro.badg.es/v2/built-with-astro/tiny.svg" alt="Built with Astro" />
   </a>
 
   <a href="https://donate.teplostanski.me" target="_blank">
-    <img src="https://src.teplostanski.me/support-me.svg" alt="Support Me ❤" />
+    <img src="https://src.teplostanski.me/support-the-project.svg" alt="Support the project ❤" />
   </a>
 </div>
