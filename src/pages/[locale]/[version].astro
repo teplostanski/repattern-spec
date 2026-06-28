@@ -1,0 +1,23 @@
+---
+import SpecDocument from '../../components/SpecDocument.astro';
+import { prefixedLocales } from '../../lib/i18n-routes';
+import { loadSpecPageOrThrow } from '../../lib/load-spec-page';
+import { getCollection } from 'astro:content';
+import { listVersions, type Locale } from '../../lib/spec';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('spec');
+  const versions = listVersions(entries);
+  return prefixedLocales().flatMap((locale) =>
+    versions.map((version) => ({
+      params: { locale, version },
+    })),
+  );
+}
+
+const locale = Astro.params.locale as Locale;
+const { version } = Astro.params;
+const page = await loadSpecPageOrThrow(locale, version);
+---
+
+<SpecDocument locale={locale} {...page} />

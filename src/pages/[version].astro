@@ -1,0 +1,19 @@
+---
+import SpecDocument from '../components/SpecDocument.astro';
+import { loadSpecPageOrThrow } from '../lib/load-spec-page';
+import { getCollection } from 'astro:content';
+import { DEFAULT_LOCALE, listVersions } from '../lib/spec';
+
+export async function getStaticPaths() {
+  const entries = await getCollection('spec');
+  const versions = listVersions(entries);
+  return versions.map((version) => ({
+    params: { version },
+  }));
+}
+
+const { version } = Astro.params;
+const page = await loadSpecPageOrThrow(DEFAULT_LOCALE, version);
+---
+
+<SpecDocument locale={DEFAULT_LOCALE} {...page} />

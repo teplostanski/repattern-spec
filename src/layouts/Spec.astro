@@ -1,0 +1,22 @@
+---
+import Base from './Base.astro';
+import MarkdownPreview from '../components/MarkdownPreview.astro';
+import type { Locale } from '../lib/spec';
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description: string;
+  version: string;
+}
+
+const { lang, title, description, version } = Astro.props;
+---
+
+<Base lang={lang} title={title} description={description} version={version}>
+  <article>
+    <MarkdownPreview>
+      <slot />
+    </MarkdownPreview>
+  </article>
+</Base>

@@ -1,0 +1,15 @@
+---
+import SpecDocument from '../../components/SpecDocument.astro';
+import { localeIndexPaths } from '../../lib/i18n-routes';
+import { loadSpecPageOrThrow } from '../../lib/load-spec-page';
+import type { Locale } from '../../lib/spec';
+
+export function getStaticPaths() {
+  return localeIndexPaths();
+}
+
+const locale = Astro.params.locale as Locale;
+const page = await loadSpecPageOrThrow(locale);
+---
+
+<SpecDocument locale={locale} {...page} />
