@@ -1,6 +1,6 @@
 export const siteConfig = {
   name: 'repattern',
-  url: 'https://repattern.teplostanski.me',
+  url: 'https://spec.repattern.dev',
 
   spec: {
     currentVersion: 'current',
