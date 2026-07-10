@@ -15,15 +15,6 @@ Schemas provide a human-readable way to describe patterns, as an alternative to 
 - **Specification** (`src/content/spec/`) — [CC BY-SA 4.0](LICENSE-SPEC)
 - **Website source code** — [MIT](LICENSE)
 
-<br>
-<br>
+## Support
 
-<div align="center">
-  <a href="https://astro.build" target="_blank">
-    <img src="https://astro.badg.es/v2/built-with-astro/tiny.svg" alt="Built with Astro" />
-  </a>
-
-  <a href="https://donate.teplostanski.me" target="_blank">
-    <img src="https://src.teplostanski.me/support-the-project.svg" alt="Support the project ❤" />
-  </a>
-</div>
+If this is useful, you can support development: [donate.teplostanski.me](https://donate.teplostanski.me)
