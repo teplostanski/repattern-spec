@@ -1,28 +1,28 @@
 ---
-title: 'repattern Specification 1.0.0-beta.0'
-description: 'Спецификация встраиваемого DSL для создания регулярных выражений в JavaScript на основе декларативных схем.'
+title: 'repattern Specification 1.0.0-beta.1'
+description: 'Встраиваемый data-first DSL для построения JavaScript RegExp из декларативных сериализуемых схем.'
 locale: ru
 version: 'current'
 draft: false
 ---
 
-# repattern Спецификация 1.0.0-beta.0
+# repattern Спецификация 1.0.0-beta.1
 
-Спецификация встраиваемого DSL для создания регулярных выражений в JavaScript на основе декларативных схем.
+Встраиваемый data-first DSL для построения JavaScript RegExp из декларативных сериализуемых схем.
 
 **Языки:** [Английский](/)
 
 **Участие:** GitHub [teplostanski/repattern-spec](https://github.com/teplostanski/repattern-spec) ([создать issue](https://github.com/teplostanski/repattern-spec/issues/new), [открытые issues](https://github.com/teplostanski/repattern-spec/issues))
 
-<!--**Версии:** draft (эта страница), [current](/ru/), [1.0.0-beta](/ru/1.0.0-beta/)-->
+**Версии:** current (эта страница), [1.0.0-beta](/ru/1.0.0-beta/)
 
 ## Аннотация
 
-Спецификация repattern — [встраиваемого DSL](https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%B5%D0%B4%D0%BC%D0%B5%D1%82%D0%BD%D0%BE-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9_%D1%8F%D0%B7%D1%8B%D0%BA) для создания регулярных выражений в JavaScript на основе декларативных схем типа [`Schema`](#21-schema), которые преобразуются в объекты `RegExp`.
+Спецификация repattern описывает [встраиваемый DSL](https://ru.wikipedia.org/wiki/%D0%9F%D1%80%D0%B5%D0%B4%D0%BC%D0%B5%D1%82%D0%BD%D0%BE-%D0%BE%D1%80%D0%B8%D0%B5%D0%BD%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D0%B9_%D1%8F%D0%B7%D1%8B%D0%BA) для построения регулярных выражений в JavaScript. DSL следует подходу **data-first**: шаблон задаётся данными — декларативной схемой типа [`Schema`](#21-schema) — и преобразуется реализацией в объект [`RegExp`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
+
+Схема сериализуема и может быть задана в коде либо получена из внешнего источника. Схемы являются альтернативой записи регулярных выражений в виде литералов.
 
 <!--Спецификация определяет инструменты `createRegExp` и `sanitizeSchema` для работы со схемами, а также структуру самих схем. -->
-
-Схемы представляют собой человекочитаемый формат описания шаблонов, альтернативный написанию регулярных выражений вручную.
 
 > [!NOTE]
 > Для эффективного использования данной спецификации рекомендуется понимать термины и принципы работы регулярных выражений, так как схемы описывают те же концепции в декларативном формате.
@@ -85,7 +85,11 @@ draft: false
 ```javascript
 const schema = [
   { lineStart: true },
-  { zeroOrMore: [{ charIn: 'a-z' }] },
+  {
+    zeroOrMore: [
+      { charIn: 'a-z' },
+    ],
+  },
   { lineEnd: true },
 ];
 // Результат: /^[a-z]*$/
@@ -438,12 +442,27 @@ type AnyOfParams = {
 
 ```javascript
 const schema = [
-  { repeat: [{ charIn: 'a-z' }, { params: { times: [0, 3], lazy: true } }] },
+  {
+    repeat: [
+      { charIn: 'a-z' },
+      {
+        params: {
+          times: [0, 3],
+          lazy: true,
+        },
+      },
+    ],
+  },
 ];
 // Результат: /(?:[a-z]){0,3}?/
 
 const schema = [
-  { repeat: [{ exactly: 'foo' }, { params: { group: 'word' } }] },
+  {
+    repeat: [
+      { exactly: 'foo' },
+      { params: { group: 'word' } },
+    ],
+  },
 ];
 // Результат: /(?<word>foo)+/
 ```
@@ -466,7 +485,13 @@ const schema = [
 #### Примеры
 
 ```javascript
-const schema = [{ zeroOrMore: [{ exactly: 'foo' }] }];
+const schema = [
+  {
+    zeroOrMore: [
+      { exactly: 'foo' },
+    ],
+  },
+];
 // Результат: /(?:foo)*/
 
 const schema = [
@@ -498,11 +523,22 @@ const schema = [
 #### Примеры
 
 ```javascript
-const schema = [{ maybe: [{ exactly: 'foo' }] }];
+const schema = [
+  {
+    maybe: [
+      { exactly: 'foo' },
+    ],
+  },
+];
 // Результат: /(?:foo)?/
 
 const schema = [
-  { maybe: [{ charIn: 'A-Z' }, { params: { group: 'opt', lazy: true } }] },
+  {
+    maybe: [
+      { charIn: 'A-Z' },
+      { params: { group: 'opt', lazy: true } },
+    ],
+  },
 ];
 // Результат: /(?<opt>[A-Z])??/
 ```
@@ -532,16 +568,33 @@ const schema = [
 #### Примеры
 
 ```javascript
-const schema = [{ grouped: [{ exactly: 'foo' }, { charIn: 'A-Z' }] }];
+const schema = [
+  {
+    grouped: [
+      { exactly: 'foo' },
+      { charIn: 'A-Z' },
+    ],
+  },
+];
 // Результат: /(foo[A-Z])/
 
 const schema = [
-  { grouped: [{ exactly: 'bar' }, { params: { group: false } }] },
+  {
+    grouped: [
+      { exactly: 'bar' },
+      { params: { group: false } },
+    ],
+  },
 ];
 // Результат: /(?:bar)/
 
 const schema = [
-  { grouped: [{ exactly: 'buzz' }, { params: { group: 'word' } }] },
+  {
+    grouped: [
+      { exactly: 'buzz' },
+      { params: { group: 'word' } },
+    ],
+  },
 ];
 // Результат: /(?<word>buzz)/
 ```
@@ -589,8 +642,14 @@ const schema = [
 const schema = [
   {
     anyOf: [
-      [{ charIn: '01' }, { digit: true }], // ветвь 1
-      [{ exactly: '2' }, { charIn: '0-3' }], // ветвь 2
+      [
+        { charIn: '01' },
+        { digit: true },
+      ], // ветвь 1
+      [
+        { exactly: '2' },
+        { charIn: '0-3' },
+      ], // ветвь 2
       { params: { group: 'hours' } },
     ],
   },
