@@ -90,7 +90,7 @@ const schema = [
   },
   { lineEnd: true },
 ];
-// Result: /^[a-z]*$/
+// Result: /^(?:[a-z])*$/
 ```
 
 **Example: validating an email address**
@@ -260,7 +260,7 @@ times?: number | [number] | [number, number];
 
 Enables a lazy (non-greedy) quantifier.
 
-`true` makes the quantifier lazy (`*?`, `{n,}?`); `false` keeps the default greedy behavior. Applies to all quantifiers: [`repeat`](#311-repeat), [`zeroOrMore`](#312-zeroormore), [`maybe`](#313-maybe).
+`true` makes the quantifier lazy (`*?`, `??`, `{n,}?`); `false` keeps the default greedy behavior. Applies to all quantifiers: [`repeat`](#311-repeat), [`zeroOrMore`](#312-zeroormore), [`maybe`](#313-maybe).
 
 ```typescript
 lazy?: boolean;
@@ -501,7 +501,7 @@ const schema = [
     ],
   },
 ];
-// Result: /(?<letters>[a-z]*?)/
+// Result: /(?<letters>[a-z])*?/
 ```
 
 ### 3.1.3. `maybe`
