@@ -23,6 +23,33 @@
   letter-spacing: -0.02em;
 }
 
+.markdown-preview .heading-anchor {
+  display: inline-flex;
+  float: left;
+  align-items: center;
+  justify-content: center;
+  width: 1.5em;
+  height: 1.5em;
+  margin-left: -1.5em;
+  border-radius: 0.25em;
+  color: var(--muted);
+  text-decoration: none;
+}
+
+.markdown-preview .heading-anchor:hover,
+.markdown-preview .heading-anchor:focus-visible,
+.markdown-preview .heading-anchor:active,
+.markdown-preview :is(h1, h2, h3, h4, h5, h6):target > .heading-anchor {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.markdown-preview .heading-anchor svg {
+  width: 0.8em;
+  height: 0.8em;
+  flex: none;
+}
+
 .markdown-preview h1 {
   font-size: 1.75em;
   border-bottom: 1px solid var(--border);
