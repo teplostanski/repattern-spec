@@ -1,28 +1,26 @@
 ---
-title: 'repattern Specification (draft)'
-description: 'Specification of an embedded DSL for building JavaScript RegExp from declarative schemas.'
+title: 'repattern Specification 1.0.0-beta.1 (JavaScript Flavor)'
+description: 'An embedded data-first DSL for building JavaScript RegExp from declarative, serializable schemas.'
 locale: en
-version: 'draft'
+version: 'current'
 draft: true
 ---
 
-# repattern Specification (draft)
+# repattern Specification 1.0.0-beta.1 (JavaScript Flavor)
 
-Specification of an embedded DSL for building JavaScript RegExp from declarative schemas.
+An embedded data-first DSL for building JavaScript RegExp from declarative, serializable schemas.
 
-**Languages:** [Russian](/ru/draft/)
-
-<!--**Versions:** draft (this page), [current](/), [1.0.0-beta](/1.0.0-beta/)-->
+**Languages:** [Russian](/ru/)
 
 **Contribute:** GitHub [teplostanski/repattern-spec](https://github.com/teplostanski/repattern-spec) ([new issue](https://github.com/teplostanski/repattern-spec/issues/new), [open issues](https://github.com/teplostanski/repattern-spec/issues))
 
+**Versions:** current (this page), [1.0.0-beta](/1.0.0-beta/)
+
 ## Abstract
 
-The repattern specification defines an [embedded DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for building JavaScript regular expressions from declarative [`Schema`](#21-schema) objects that are converted into `RegExp` instances.
+The repattern specification describes an [embedded DSL](https://en.wikipedia.org/wiki/Domain-specific_language) for building regular expressions in JavaScript. The DSL is **data-first**: a pattern is expressed as data — a declarative [`Schema`](#21-schema) — and an implementation turns that schema into a [`RegExp`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp).
 
-<!--The specification defines the `createRegExp` and `sanitizeSchema` tools for working with schemas, as well as the structure of the schemas themselves. -->
-
-Schemas provide a human-readable way to describe patterns, as an alternative to writing regular expressions manually.
+A schema is serializable: you can define it in code or load it from an external source. Schemas are an alternative to writing regular expressions as literals.
 
 > [!NOTE]
 > To use this specification effectively, you should be familiar with regular expression terminology and how regular expressions work, since schemas express the same concepts in a declarative form.
@@ -85,10 +83,14 @@ A schema is an array (sequencer) of objects (atoms) that describes a regular exp
 ```javascript
 const schema = [
   { lineStart: true },
-  { zeroOrMore: [{ charIn: 'a-z' }] },
+  {
+    zeroOrMore: [
+      { charIn: 'a-z' },
+    ],
+  },
   { lineEnd: true },
 ];
-// Result: /^[a-z]*$/
+// Result: /^(?:[a-z])*$/
 ```
 
 **Example: validating an email address**
@@ -258,7 +260,7 @@ times?: number | [number] | [number, number];
 
 Enables a lazy (non-greedy) quantifier.
 
-`true` makes the quantifier lazy (`*?`, `{n,}?`); `false` keeps the default greedy behavior. Applies to all quantifiers: [`repeat`](#311-repeat), [`zeroOrMore`](#312-zeroormore), [`maybe`](#313-maybe).
+`true` makes the quantifier lazy (`*?`, `??`, `{n,}?`); `false` keeps the default greedy behavior. Applies to all quantifiers: [`repeat`](#311-repeat), [`zeroOrMore`](#312-zeroormore), [`maybe`](#313-maybe).
 
 ```typescript
 lazy?: boolean;
@@ -439,12 +441,27 @@ The `params` object may contain (see [Params object `params`](#15-params-object-
 
 ```javascript
 const schema = [
-  { repeat: [{ charIn: 'a-z' }, { params: { times: [0, 3], lazy: true } }] },
+  {
+    repeat: [
+      { charIn: 'a-z' },
+      {
+        params: {
+          times: [0, 3],
+          lazy: true,
+        },
+      },
+    ],
+  },
 ];
 // Result: /(?:[a-z]){0,3}?/
 
 const schema = [
-  { repeat: [{ exactly: 'foo' }, { params: { group: 'word' } }] },
+  {
+    repeat: [
+      { exactly: 'foo' },
+      { params: { group: 'word' } },
+    ],
+  },
 ];
 // Result: /(?<word>foo)+/
 ```
@@ -467,7 +484,13 @@ The `params` object may contain (see [Params object `params`](#15-params-object-
 #### Examples
 
 ```javascript
-const schema = [{ zeroOrMore: [{ exactly: 'foo' }] }];
+const schema = [
+  {
+    zeroOrMore: [
+      { exactly: 'foo' },
+    ],
+  },
+];
 // Result: /(?:foo)*/
 
 const schema = [
@@ -478,7 +501,7 @@ const schema = [
     ],
   },
 ];
-// Result: /(?<letters>[a-z]*?)/
+// Result: /(?<letters>[a-z])*?/
 ```
 
 ### 3.1.3. `maybe`
@@ -499,11 +522,22 @@ The `params` object may contain (see [Params object `params`](#15-params-object-
 #### Examples
 
 ```javascript
-const schema = [{ maybe: [{ exactly: 'foo' }] }];
+const schema = [
+  {
+    maybe: [
+      { exactly: 'foo' },
+    ],
+  },
+];
 // Result: /(?:foo)?/
 
 const schema = [
-  { maybe: [{ charIn: 'A-Z' }, { params: { group: 'opt', lazy: true } }] },
+  {
+    maybe: [
+      { charIn: 'A-Z' },
+      { params: { group: 'opt', lazy: true } },
+    ],
+  },
 ];
 // Result: /(?<opt>[A-Z])??/
 ```
@@ -532,16 +566,33 @@ The `params` object may contain (see [Params object `params`](#15-params-object-
 #### Examples
 
 ```javascript
-const schema = [{ grouped: [{ exactly: 'foo' }, { charIn: 'A-Z' }] }];
+const schema = [
+  {
+    grouped: [
+      { exactly: 'foo' },
+      { charIn: 'A-Z' },
+    ],
+  },
+];
 // Result: /(foo[A-Z])/
 
 const schema = [
-  { grouped: [{ exactly: 'bar' }, { params: { group: false } }] },
+  {
+    grouped: [
+      { exactly: 'bar' },
+      { params: { group: false } },
+    ],
+  },
 ];
 // Result: /(?:bar)/
 
 const schema = [
-  { grouped: [{ exactly: 'buzz' }, { params: { group: 'word' } }] },
+  {
+    grouped: [
+      { exactly: 'buzz' },
+      { params: { group: 'word' } },
+    ],
+  },
 ];
 // Result: /(?<word>buzz)/
 ```
@@ -588,8 +639,14 @@ The `params` object may contain (see [Params object `params`](#15-params-object-
 const schema = [
   {
     anyOf: [
-      [{ charIn: '01' }, { digit: true }], // branch 1
-      [{ exactly: '2' }, { charIn: '0-3' }], // branch 2
+      [
+        { charIn: '01' },
+        { digit: true },
+      ], // branch 1
+      [
+        { exactly: '2' },
+        { charIn: '0-3' },
+      ], // branch 2
       { params: { group: 'hours' } },
     ],
   },
